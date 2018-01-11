@@ -90,9 +90,17 @@ public class SudokuSolver {
                 }
                 try  {
                     val = Integer.parseInt(frame.textFields[row][col].getText());
+                    
+                    // If the number was 0, throw an exception for same behaviour as a non-number
+                    if (val == 0) {
+                        throw new NumberFormatException();
+                    }
+                    
                 }
                 catch (NumberFormatException e){
-                    JOptionPane.showMessageDialog(frame, "Could not parse cell at\nrow: "+row+"\ncol: "+col+"\n\n"+e,"Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    
+                    // Display error window for user
+                    JOptionPane.showMessageDialog(frame, "Inproper input found at\nRow: "+(row+1)+"\nCol: "+(col+1)+"\nValue: \""+frame.textFields[row][col].getText()+"\"","Invalid Input", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
                 
