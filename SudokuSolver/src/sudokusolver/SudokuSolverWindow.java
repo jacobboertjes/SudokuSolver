@@ -6,7 +6,7 @@
  * Purpose: Provides a GUI for user to input a sudoku problem
  *
  * Revisions:
- *  File Created - Oct 16, 2017
+ *  File Created - Jan 3, 2017
  */
 package sudokusolver;
 

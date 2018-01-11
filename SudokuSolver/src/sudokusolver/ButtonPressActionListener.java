@@ -17,6 +17,6 @@ public class ButtonPressActionListener implements ActionListener {
     // ActionHandler for a button press
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("testing");
+        SudokuSolver.attemptSolve();
     }
 }
