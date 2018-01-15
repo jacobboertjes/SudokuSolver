@@ -6,7 +6,9 @@
  * Author: Jacob Boertjes
  *
  * Revisions:
- *  Jan 3, 2017 - Created
+ *  File Created - January 3, 2018
+ *  fillCellsArr() added - January 12, 2018
+ *  attemptSolve() added - January 12, 2018
  */
 package sudokusolver;
 

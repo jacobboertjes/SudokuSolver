@@ -6,7 +6,7 @@
  * Purpose: Provides a GUI for user to input a sudoku problem
  *
  * Revisions:
- *  File Created - Jan 3, 2017
+ *  File Created - Jan 3, 2018
  */
 package sudokusolver;
 
@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 /**
  *
  * @author jacob
- * 
+ *
  * Info:
  *      All text boxes are named with format: "textBox<row><col>"\
  *          Example: top left box is textBox00, next one in row is textBox01 etc
@@ -27,16 +27,16 @@ public class SudokuSolverWindow extends javax.swing.JFrame {
 
     // An array to keep all textFields in order
     public JTextField textFields[][];
-    
+
     // Allow public access to button
     JButton solveButton;
-    
+
     /**
      * Creates new form SudokuSolverWindow
      */
     public SudokuSolverWindow() {
         initComponents();
-        
+
         // Initialize all the text fields into array
         textFields = new JTextField[][]{
             {textBox00, textBox01, textBox02, textBox03, textBox04, textBox05, textBox06, textBox07, textBox08},
@@ -49,7 +49,7 @@ public class SudokuSolverWindow extends javax.swing.JFrame {
             {textBox70, textBox71, textBox72, textBox73, textBox74, textBox75, textBox76, textBox77, textBox78},
             {textBox80, textBox81, textBox82, textBox83, textBox84, textBox85, textBox86, textBox87, textBox88}
         };
-        
+
         // Initialize the Solve Button
         solveButton = solveBtn;
     }
@@ -1031,7 +1031,7 @@ public class SudokuSolverWindow extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
