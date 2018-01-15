@@ -172,7 +172,7 @@ public class SudokuSolver {
         // An array to keep track of which numbers we have seen
         //    seenNumber[i]==false means we have not seen the number at i
         //    seenNumber[i]==true means we have seen it
-        Boolean seenNumber[] = {false, false, false, false, false, false, false, false, false}
+        Boolean seenNumber[] = {false, false, false, false, false, false, false, false, false};
 
         // Loop over all cols in this row to first fill in which numbers are in this row
         for (int col = 0; col < 9; col++) {
