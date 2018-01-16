@@ -61,7 +61,7 @@ public class SudokuPuzzle {
   }
 
   /**
-   * getCellValue()
+   * getCellValue(row, col)
    *
    * Purpose:
    *      Returns the value in a given cell
@@ -81,7 +81,7 @@ public class SudokuPuzzle {
   }
 
   /**
-   * setCellValue()
+   * setCellValue(row, col, val)
    *
    * Purpose:
    *      Sets the value of a given cell
@@ -103,5 +103,37 @@ public class SudokuPuzzle {
       throw new IndexOutOfBoundsException();
 
     cells[row][col] = val;
+
+    // If we are making a cell non-empty, add to number of filled cells
+    if (val != 0) {
+      rowContents[row][0]++;
+      colContents[col][0]++;
+      boxContents[coordinateToBoxIdx(row,col)][0]++;
+
+      // Also update that val exists in the row, col and box
+      rowContents[row][val] = 1;
+      colContents[col][val] = 1;
+      boxContents[coordinateToBoxIdx(row,col)][val] = 1;
+    }
+  }
+
+  /**
+   * coordinateToBoxIdx()
+   *
+   * Purpose:
+   *      Gives the coresponding box index for a given cell coordinate
+   *
+   * Input:
+   *      @param row - The index of the cell's row (0-8)
+   *      @param col - The index of the cell's col (0-8)
+   *
+   * Output:
+   *      @return - The index of the box which contains the cell's coordinates
+  */
+  private int coordinateToBoxIdx(int row, int col) {
+    if (row > 8 || row < 0 || col > 8 || col < 0)
+      throw new IndexOutOfBoundsException();
+      
+    throw new java.lang.UnsupportedOperationException("Not supported yet.");
   }
 }
