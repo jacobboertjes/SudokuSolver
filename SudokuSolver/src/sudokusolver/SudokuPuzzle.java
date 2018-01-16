@@ -7,14 +7,44 @@
  *
  * Revisions:
  *  Jan 15, 2018 - Created
+ *  Jan 16, 2018 - Functions Implemented
  */
 package sudokusolver;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Arrays;
+
+
+/**
+ * Coordinate
+ *
+ * Purpose:
+ *      A small class to hold a coordinate which will be used in the HashMap
+ */
+class Coordinate {
+  private int x;
+  private int y;
+
+  public Coordinate(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public int getx() {
+    return x;
+  }
+
+  public int gety() {
+    return y;
+  }
+}
+
 
 public class SudokuPuzzle {
 
   // 2D array to keep track of all cell values
+  // Format: cells[rowIndex][colIndex]
   private int[][] cells;
 
   // A 2D array to keep track of numbers which exist in each row
@@ -49,6 +79,10 @@ public class SudokuPuzzle {
   //  ----------------------------
   private int[][] boxContents;
 
+  // A map for each cell to keep track of possibilities for that cell
+  // Format: possibilities[rowIndex][colIndex]
+  private HashMap<Coordinate,HashSet<Integer>> possibilities;
+
   public SudokuPuzzle() {
 
     // Initialize the cells
@@ -58,6 +92,9 @@ public class SudokuPuzzle {
     rowContents = new int[9][10];
     colContents = new int[9][10];
     boxContents = new int[9][10];
+
+    // Initialize possibilities
+    possibilities = new HashMap<Coordinate, HashSet<Integer>>();
   }
 
   /**
@@ -121,7 +158,7 @@ public class SudokuPuzzle {
   }
 
   /**
-   * coordinateToBoxIdx()
+   * coordinateToBoxIdx(row, col)
    *
    * Purpose:
    *      Gives the coresponding box index for a given cell coordinate
@@ -142,5 +179,36 @@ public class SudokuPuzzle {
     // Seems silly to divide by 3 then multiply by 3
     //  but it will remove remainder before multiplying, giving proper answer
     return (row/3)*3 + (col/3);
+  }
+
+  /**
+   * fillCellPossibilities(row, col)
+   *
+   * Purpose:
+   *      Fills a given cell's possible values
+   *
+   * Input:
+   *      @param row - The index of the cell's row (0-8)
+   *      @param col - The index of the cell's col (0-8)
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+  *       The row, col and box contents have been filled already
+  */
+  public void fillCellPossibilities(int row, int col) {
+    // Make an HashSet for this cell's possible values
+    HashSet<Integer> vals = new HashSet<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+
+    // Remove each value which is inside this row, column or box
+    for (int i = 1; i <= 9; i++) {
+      if (rowContents[row][i] == 1) vals.remove(i);
+      if (colContents[col][i] == 1) vals.remove(i);
+      if (boxContents[coordinateToBoxIdx(row,col)][i] == 1) vals.remove(i);
+    }
+
+    // Now that we hve made our list, put it in the HashMap
+    possibilities.put(new Coordinate(row,col), vals);
   }
 }
