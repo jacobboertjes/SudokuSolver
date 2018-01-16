@@ -106,14 +106,17 @@ public class SudokuPuzzle {
 
     // If we are making a cell non-empty, add to number of filled cells
     if (val != 0) {
+
+      int boxIndex = coordinateToBoxIdx(row,col);
+
       rowContents[row][0]++;
       colContents[col][0]++;
-      boxContents[coordinateToBoxIdx(row,col)][0]++;
+      boxContents[boxIndex][0]++;
 
       // Also update that val exists in the row, col and box
       rowContents[row][val] = 1;
       colContents[col][val] = 1;
-      boxContents[coordinateToBoxIdx(row,col)][val] = 1;
+      boxContents[boxIndex][val] = 1;
     }
   }
 
@@ -133,7 +136,11 @@ public class SudokuPuzzle {
   private int coordinateToBoxIdx(int row, int col) {
     if (row > 8 || row < 0 || col > 8 || col < 0)
       throw new IndexOutOfBoundsException();
-      
-    throw new java.lang.UnsupportedOperationException("Not supported yet.");
+
+    System.out.println("Row: " + row + " Col: " + col + " Box: " +  ((row/3)*3 + (col/3)));
+
+    // Seems silly to divide by 3 then multiply by 3
+    //  but it will remove remainder before multiplying, giving proper answer
+    return (row/3)*3 + (col/3);
   }
 }
