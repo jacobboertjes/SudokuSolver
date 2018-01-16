@@ -96,8 +96,8 @@ public class SudokuPuzzle {
   */
   public void setCellValue(int row, int col, int val) {
     // Check for valid input arguments
-    if (val > 9 || val < 1)
-      throw new IllegalArgumentException("The given value was not between 1 and 9");
+    if (val > 9 || val < 0)
+      throw new NumberFormatException();
 
     if (row > 8 || row < 0 || col > 8 || col < 0)
       throw new IndexOutOfBoundsException();
