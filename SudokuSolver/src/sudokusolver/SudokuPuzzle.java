@@ -84,6 +84,9 @@ public class SudokuPuzzle {
   // Format: possibilities[rowIndex][colIndex]
   private HashMap<Coordinate,TreeSet<Integer>> possibilities;
 
+  // An array to keep the coordinate objects for possibilities map
+  private Coordinate[][] coordinates;
+
   // We need access to the frame
   SudokuSolverWindow frame;
 
@@ -105,6 +108,9 @@ public class SudokuPuzzle {
 
     // Initialize possibilities
     possibilities = new HashMap<Coordinate, TreeSet<Integer>>();
+
+    // Initialize the coordinate Array
+    coordinates = new Coordinate[9][9];
 
     // Initialize filledCells
     filledCells = 0;
@@ -291,8 +297,13 @@ public class SudokuPuzzle {
       setCellValue(row, col, vals.first());
     }
 
-    // Now that we hve made our list, put it in the HashMap
-    possibilities.put(new Coordinate(row,col), vals);
+    // If the coordinate doesn't exist yet
+    if (coordinates[row][col] == null) {
+      coordinates[row][col] = new Coordinate(row, col);
+    }
+
+    // Now that we have made our list, put it in the HashMap
+    possibilities.put(coordinates[row][col], vals);
 
     return rt;
   }
@@ -321,6 +332,7 @@ public class SudokuPuzzle {
       if (rowContents[row][0] == 9) continue;
 
       // Check the row
+      checkFillableRow(row);
     }
   }
 
@@ -351,7 +363,7 @@ public class SudokuPuzzle {
 
       // To keep track of cells where this value could go
       int possibleCells = 0;
-      int lastPossibleCol;
+      int lastPossibleCol = -1;
 
       // Loops over row's cells
       for (int col = 0; col < 9; col++) {
@@ -360,7 +372,7 @@ public class SudokuPuzzle {
 
         // If this cell's possible values contains i, add to possible cells
         // and update the last possibleCol
-        if(possibilities.get(new Coordinate(row,col).contains(i))) {
+        if(possibilities.get(coordinates[row][col]).contains(i)) {
           possibleCells++;
           lastPossibleCol = col;
         }
@@ -369,6 +381,83 @@ public class SudokuPuzzle {
       // If there is only one possible cell
       if (possibleCells == 1) {
         setCellValue(row, lastPossibleCol, i);
+      }
+    }
+  }
+
+  /**
+   * checkForFillableCols()
+   *
+   * Purpose:
+   *      Check if a col is missing a value and only has one cell within
+   *      the row that it can go in. (Will fill with value if it finds one)
+   *
+   * Input:
+   *      None
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The col contents have been filled already
+   *      As well as possible values
+  */
+  public void checkForFillableCols() {
+    // Check each row that is not filled
+    for (int col = 0; col < 9; col++) {
+      // If the col is filled, continue
+      if (colContents[col][0] == 9) continue;
+
+      // Check the col
+      checkFillableCol(col);
+    }
+  }
+
+  /**
+   * checkFillableCol()
+   *
+   * Purpose:
+   *      Check a given row for missing values with only one possible cell
+   *
+   * Input:
+   *      @param col - The index of the col
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The col contents have been filled already
+   *      As well as possible values
+  */
+  private void checkFillableCol(int col) {
+    if (col > 8 || col < 0)
+      throw new IndexOutOfBoundsException();
+
+    // Loop over values 1-9
+    for (int i = 1; i <= 9; i++) {
+      // If the col already has this value, continue
+      if (colContents[col][i] != 0) continue;
+
+      // To keep track of cells where this value could go
+      int possibleCells = 0;
+      int lastPossibleRow = -1;
+
+      // Loops over col's cells
+      for (int row = 0; row < 9; row++) {
+        // If the cell is already filled, continue
+        if(cells[row][col] != 0) continue;
+
+        // If this cell's possible values contains i, add to possible cells
+        // and update the last possibleCol
+        if(possibilities.get(coordinates[row][col]).contains(i)) {
+          possibleCells++;
+          lastPossibleRow = row;
+        }
+      }
+
+      // If there is only one possible cell
+      if (possibleCells == 1) {
+        setCellValue(lastPossibleRow, col, i);
       }
     }
   }
