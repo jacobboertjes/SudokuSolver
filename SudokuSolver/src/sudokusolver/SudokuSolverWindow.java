@@ -157,7 +157,7 @@ public class SudokuSolverWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sudoku Solver");
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
 
         topLeftPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         topLeftPanel.setMaximumSize(new java.awt.Dimension(150, 150));

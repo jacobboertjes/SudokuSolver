@@ -37,7 +37,7 @@ public class SudokuSolver {
         frame.setVisible(true);
 
         // Initialize puzzle
-        puzzle = new SudokuPuzzle();
+        puzzle = new SudokuPuzzle(frame);
     }
 
     /**
@@ -56,6 +56,9 @@ public class SudokuSolver {
         // Get all values from user input on screen
         //     If it failed (returns false) then return
         if (!fillPuzzleCells()) return;
+
+        // Fill possible values for all cells
+        puzzle.fillAllCellPossibilities();
     }
 
     /**

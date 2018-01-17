@@ -11,9 +11,10 @@
  */
 package sudokusolver;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 /**
@@ -81,9 +82,15 @@ public class SudokuPuzzle {
 
   // A map for each cell to keep track of possibilities for that cell
   // Format: possibilities[rowIndex][colIndex]
-  private HashMap<Coordinate,HashSet<Integer>> possibilities;
+  private HashMap<Coordinate,TreeSet<Integer>> possibilities;
 
-  public SudokuPuzzle() {
+  // We need access to the frame
+  SudokuSolverWindow frame;
+
+  public SudokuPuzzle(SudokuSolverWindow frame) {
+
+    // Initialize the frame
+    this.frame = frame;
 
     // Initialize the cells
     cells = new int[9][9];
@@ -94,7 +101,7 @@ public class SudokuPuzzle {
     boxContents = new int[9][10];
 
     // Initialize possibilities
-    possibilities = new HashMap<Coordinate, HashSet<Integer>>();
+    possibilities = new HashMap<Coordinate, TreeSet<Integer>>();
   }
 
   /**
@@ -140,6 +147,7 @@ public class SudokuPuzzle {
       throw new IndexOutOfBoundsException();
 
     cells[row][col] = val;
+    if (val != 0) frame.textFields[row][col].setText(String.valueOf(val));
 
     // If we are making a cell non-empty, add to number of filled cells
     if (val != 0) {
@@ -174,41 +182,89 @@ public class SudokuPuzzle {
     if (row > 8 || row < 0 || col > 8 || col < 0)
       throw new IndexOutOfBoundsException();
 
-    System.out.println("Row: " + row + " Col: " + col + " Box: " +  ((row/3)*3 + (col/3)));
-
     // Seems silly to divide by 3 then multiply by 3
     //  but it will remove remainder before multiplying, giving proper answer
     return (row/3)*3 + (col/3);
   }
 
   /**
-   * fillCellPossibilities(row, col)
+   * fillAllCellPossibilities()
    *
    * Purpose:
-   *      Fills a given cell's possible values
+   *      Fills all cells' possible values. Will fill any
+   *      cell's true values if they only had one possibility
    *
    * Input:
    *      @param row - The index of the cell's row (0-8)
    *      @param col - The index of the cell's col (0-8)
    *
    * Output:
-   *      None
+   *      @return - The number of cells whose true value was found
+   *                OR -1 if an empty cell had no possible values
    *
    * Assumption:
   *       The row, col and box contents have been filled already
   */
-  public void fillCellPossibilities(int row, int col) {
-    // Make an HashSet for this cell's possible values
-    HashSet<Integer> vals = new HashSet<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+  public int fillAllCellPossibilities() {
+    int rt = 0;
+
+    for (int row = 0; row < 9; row++) {
+      for (int col = 0; col < 9; col++) {
+
+        // We only need to fill in for empty cells
+        if (cells[row][col] != 0) continue;
+
+        // Fill in the cell's possible values
+        switch (fillCellPossibilities(row,col)) {
+          case 0:
+            return -1;
+          case 1:
+            rt++;
+            break;
+        }
+      }
+    }
+    return rt;
+  }
+
+  /**
+   * fillCellPossibilities(row, col)
+   *
+   * Purpose:
+   *      Fills a given cell's possible values. If it
+   *      only has one possibility, it fills it in as the true value
+   *
+   * Input:
+   *      @param row - The index of the cell's row (0-8)
+   *      @param col - The index of the cell's col (0-8)
+   *
+   * Output:
+   *      @return - The number of possible values for this cell
+   *
+   * Assumption:
+  *       The row, col and box contents have been filled already
+  */
+  public int fillCellPossibilities(int row, int col) {
+    // Make an TreeSet for this cell's possible values
+    TreeSet<Integer> vals = new TreeSet<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+
+    // default return is 9
+    int rt = 9;
 
     // Remove each value which is inside this row, column or box
     for (int i = 1; i <= 9; i++) {
-      if (rowContents[row][i] == 1) vals.remove(i);
-      if (colContents[col][i] == 1) vals.remove(i);
-      if (boxContents[coordinateToBoxIdx(row,col)][i] == 1) vals.remove(i);
+      if (rowContents[row][i] == 1) {if (vals.remove(i)) rt--;}
+      if (colContents[col][i] == 1) {if (vals.remove(i)) rt--;}
+      if (boxContents[coordinateToBoxIdx(row,col)][i] == 1) {if (vals.remove(i)) rt--;}
+    }
+
+    if (rt == 1) {
+      setCellValue(row, col, vals.first());
     }
 
     // Now that we hve made our list, put it in the HashMap
     possibilities.put(new Coordinate(row,col), vals);
+
+    return rt;
   }
 }
