@@ -87,6 +87,9 @@ public class SudokuPuzzle {
   // We need access to the frame
   SudokuSolverWindow frame;
 
+  // Keep track of the number of filled filled cells
+  private int filledCells;
+
   public SudokuPuzzle(SudokuSolverWindow frame) {
 
     // Initialize the frame
@@ -102,6 +105,26 @@ public class SudokuPuzzle {
 
     // Initialize possibilities
     possibilities = new HashMap<Coordinate, TreeSet<Integer>>();
+
+    // Initialize filledCells
+    filledCells = 0;
+  }
+
+
+  /**
+   * getNumFilledCells()
+   *
+   * Purpose:
+   *      Returns the number of filled cells
+   *
+   * Input:
+   *      None
+   *
+   * Output:
+   *      @return - The number of filled cells
+  */
+  public int getNumFilledCells() {
+    return filledCells;
   }
 
   /**
@@ -152,8 +175,11 @@ public class SudokuPuzzle {
     // If we are making a cell non-empty, add to number of filled cells
     if (val != 0) {
 
+      filledCells++;
+
       int boxIndex = coordinateToBoxIdx(row,col);
 
+      // Add to the number of filled cells in each row, column and box
       rowContents[row][0]++;
       colContents[col][0]++;
       boxContents[boxIndex][0]++;

@@ -57,8 +57,14 @@ public class SudokuSolver {
         //     If it failed (returns false) then return
         if (!fillPuzzleCells()) return;
 
-        // Fill possible values for all cells
-        puzzle.fillAllCellPossibilities();
+        do {
+          int currentFilledCells = puzzle.getNumFilledCells();
+          // Fill possible values for all cells
+          puzzle.fillAllCellPossibilities();
+
+          // If we didnt update any cells in a full loop we should exit
+          if (currentFilledCells == puzzle.getNumFilledCells()) break;
+        } while (puzzle.getNumFilledCells() < 81);
     }
 
     /**
