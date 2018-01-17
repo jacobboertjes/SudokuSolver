@@ -271,6 +271,9 @@ public class SudokuPuzzle {
   *       The row, col and box contents have been filled already
   */
   public int fillCellPossibilities(int row, int col) {
+    if (row > 8 || row < 0 || col > 8 || col < 0)
+      throw new IndexOutOfBoundsException();
+
     // Make an TreeSet for this cell's possible values
     TreeSet<Integer> vals = new TreeSet<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9));
 
@@ -292,5 +295,81 @@ public class SudokuPuzzle {
     possibilities.put(new Coordinate(row,col), vals);
 
     return rt;
+  }
+
+  /**
+   * checkForFillableRows()
+   *
+   * Purpose:
+   *      Check if a row is missing a value and only has one cell within
+   *      the row that it can go in. (Will fill with value if it finds one)
+   *
+   * Input:
+   *      None
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The row contents have been filled already
+   *      As well as possible values
+  */
+  public void checkForFillableRows() {
+    // Check each row that is not filled
+    for (int row = 0; row < 9; row++) {
+      // If the row is filled, continue
+      if (rowContents[row][0] == 9) continue;
+
+      // Check the row
+    }
+  }
+
+  /**
+   * checkFillableRow()
+   *
+   * Purpose:
+   *      Check a given row for missing values with only one possible cell
+   *
+   * Input:
+   *      @param row - The index of the row
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The row contents have been filled already
+   *      As well as possible values
+  */
+  private void checkFillableRow(int row) {
+    if (row > 8 || row < 0)
+      throw new IndexOutOfBoundsException();
+
+    // Loop over values 1-9
+    for (int i = 1; i <= 9; i++) {
+      // If the row already has this value, continue
+      if (rowContents[row][i] != 0) continue;
+
+      // To keep track of cells where this value could go
+      int possibleCells = 0;
+      int lastPossibleCol;
+
+      // Loops over row's cells
+      for (int col = 0; col < 9; col++) {
+        // If the cell is already filled, continue
+        if(cells[row][col] != 0) continue;
+
+        // If this cell's possible values contains i, add to possible cells
+        // and update the last possibleCol
+        if(possibilities.get(new Coordinate(row,col).contains(i))) {
+          possibleCells++;
+          lastPossibleCol = col;
+        }
+      }
+
+      // If there is only one possible cell
+      if (possibleCells == 1) {
+        setCellValue(row, lastPossibleCol, i);
+      }
+    }
   }
 }
