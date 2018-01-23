@@ -417,7 +417,7 @@ public class SudokuPuzzle {
    * checkFillableCol()
    *
    * Purpose:
-   *      Check a given row for missing values with only one possible cell
+   *      Check a given col for missing values with only one possible cell
    *
    * Input:
    *      @param col - The index of the col
@@ -458,6 +458,88 @@ public class SudokuPuzzle {
       // If there is only one possible cell
       if (possibleCells == 1) {
         setCellValue(lastPossibleRow, col, i);
+      }
+    }
+  }
+
+  /**
+   * checkForFillableBoxs()
+   *
+   * Purpose:
+   *      Check if a box is missing a value and only has one cell within
+   *      the box that it can go in. (Will fill with value if it finds one)
+   *
+   * Input:
+   *      None
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The box contents have been filled already
+   *      As well as possible values
+  */
+  public void checkForFillableBoxs() {
+    // Check each row that is not filled
+    for (int box = 0; box < 9; box++) {
+      // If the box is filled, continue
+      if (boxContents[box][0] == 9) continue;
+
+      // Check the col
+      checkFillableBox(box);
+    }
+  }
+
+  /**
+   * checkFillableBox()
+   *
+   * Purpose:
+   *      Check a given box for missing values with only one possible cell
+   *
+   * Input:
+   *      @param box - The index of the box
+   *
+   * Output:
+   *      None
+   *
+   * Assumption:
+   *      The box contents have been filled already
+   *      As well as possible values
+  */
+  private void checkFillableBox(int box) {
+    if (box > 8 || box < 0)
+      throw new IndexOutOfBoundsException();
+
+    // Loop over values 1-9
+    for (int i = 1; i <= 9; i++) {
+      // If the box already has this value, continue
+      if (boxContents[box][i] != 0) continue;
+
+      // To keep track of cells where this value could go
+      int possibleCells = 0;
+      int lastPossibleRow = -1;
+      int lastPossibleCol = -1;
+
+      // Loops over box's rows
+      int boxColOffset = (box%3) * 3;
+      int boxRowOffset = (box/3) * 3;
+      for (int row = 0 + boxRowOffset; row < 3 + boxRowOffset; row++) {
+        for (int col = 0 + boxColOffset; col < 3 + boxColOffset; col++) {
+          // If the cell is already filled, continue
+          if(cells[row][col] != 0) continue;
+
+          // If this cell's possible values contains i, add to possible cells
+          // and update the last possibleCol
+          if(possibilities.get(coordinates[row][col]).contains(i)) {
+            possibleCells++;
+            lastPossibleRow = row;
+            lastPossibleCol = col;
+          }
+        }
+      }
+      // If there is only one possible cell
+      if (possibleCells == 1) {
+        setCellValue(lastPossibleRow, lastPossibleCol, i);
       }
     }
   }

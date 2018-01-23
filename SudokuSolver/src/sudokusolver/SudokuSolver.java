@@ -59,15 +59,25 @@ public class SudokuSolver {
 
         do {
           int currentFilledCells = puzzle.getNumFilledCells();
+
           // Fill possible values for all cells
           puzzle.fillAllCellPossibilities();
 
           // Try to fill by rows
           puzzle.checkForFillableRows();
 
+          // Try to fill the cols
+          puzzle.checkForFillableCols();
+
+          // Try to fill the boxes
+          puzzle.checkForFillableBoxs();
+
           // If we didnt update any cells in a full loop we should exit
           if (currentFilledCells == puzzle.getNumFilledCells()) break;
         } while (puzzle.getNumFilledCells() < 81);
+
+        // Now that we are outside the loop we should reset everything
+        puzzle = new SudokuPuzzle(frame);
     }
 
     /**
