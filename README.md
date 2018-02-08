@@ -25,3 +25,6 @@ Launch with:
 ```
 java sudokuSolver/SudokuSolver
 ```
+
+## Authors
+* **Jacob Boertjes** - **Initial Work**
