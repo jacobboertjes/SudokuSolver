@@ -27,4 +27,4 @@ java sudokuSolver/SudokuSolver
 ```
 
 ## Authors
-* **Jacob Boertjes** - **Initial Work**
+* **Jacob Boertjes** - **Initial Creation**
