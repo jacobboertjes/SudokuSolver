@@ -12,9 +12,7 @@ Download and exract the zip.
 
 ### Compilation
 In a terminal window, within the folder 
-```
-SudokuSolver/src/
-```
+```SudokuSolver/src/```
 compile with:
 ```
 javac sudokuSolver/*.java
@@ -24,4 +22,6 @@ javac sudokuSolver/*.java
 In a terminal window, within the folder
 ```SudokuSolver/src/```
 Launch with:
-```java sudokuSolver/SudokuSolver```
+```
+java sudokuSolver/SudokuSolver
+```
